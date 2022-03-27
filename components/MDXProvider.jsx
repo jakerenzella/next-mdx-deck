@@ -1,8 +1,6 @@
 import React from "react";
-import { useContext } from "react";
 import { MDXProvider } from "@mdx-js/react";
 
-import okaidia from "react-syntax-highlighter/dist/cjs/styles/prism/okaidia";
 import SlidePage from "../layouts/SlidePage";
 import Cover from "./Cover";
 import SpeakerNotes from "./SpeakerNotes";
@@ -17,28 +15,9 @@ const mdComponents = {
   code: (props) => {
     const { className } = props;
     const language = className.replace("language-", "");
-    console.log(language);
-    console.log({ ...props });
-    return (
-      <Code
-        code={props.children}
-        language={language}
-        // {...props}
-      />
-    );
+    return <Code code={props.children} language={language} />;
   },
-  // Code: (props) =>{
-  //   const { className } = props;
-  //   const language = className.replace("language-", "");
-  //   return (
-  //     <SyntaxHighlighter
-  //       className={className}
-  //       language={language}
-  //       style={okaidia}
-  //       {...props}
-  //     />
-  //   );
-  // },
+
   Cover,
   SlidePage,
   SpeakerNotes,

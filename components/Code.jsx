@@ -1,13 +1,14 @@
 import React from "react";
 import CodeMirror from "@uiw/react-codemirror";
 import { cpp } from "@codemirror/lang-cpp";
-import useEventListener from "../hooks/useEventListener";
+import { useCurrentSlide } from "../context/CurrentSlideContext";
 
 export default function Code(props) {
-  const [focused, setFocused] = React.useState(false);
   const [compileResponse, setResponse] = React.useState("");
   const [code, setCode] = React.useState(props.code);
   const [language, setLanguage] = React.useState(props.language);
+
+  const { inCodeChange } = useCurrentSlide();
 
   async function runCode(code) {
     const data = { language: "c", code: code };
@@ -23,34 +24,12 @@ export default function Code(props) {
 
   async function compileCode(code) {
     const response = await runCode(code); // command waits until completion
-    console.log(response);
     setResponse(response);
   }
 
-  const navigate = (e) => {
-    console.log(focused);
-    if (focused) {
-      console.log("prefenting default");
-      e.stopPropagation();
-    }
-  };
+  const onFocus = () => inCodeChange(true);
+  const onBlur = () => inCodeChange(false);
 
-  useEventListener("keydown", navigate);
-
-  const handleKeyPress = (event) => {
-    console.log(event);
-    if (event.key === "ArrowLeft") {
-      console.log("left press here! ");
-    }
-  };
-  const onFocus = () => {
-    console.log("focussing");
-    setFocused(true);
-  };
-  const onBlur = () => {
-    console.log("blurring");
-    setFocused(false);
-  };
   return (
     <div className="CodeMirror">
       <CodeMirror
@@ -62,7 +41,6 @@ export default function Code(props) {
         onChange={(value, viewUpdate) => setCode(value)}
         onFocus={onFocus}
         onBlur={onBlur}
-        onKeyPress={handleKeyPress}
       />
       <button onClick={() => compileCode(code)}>Run</button>
       <button onClick={() => setResponse("")}>Clear</button>

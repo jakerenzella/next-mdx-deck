@@ -228,6 +228,7 @@ export default function SlidePage({ children, next }) {
     currentStep,
     setCurrentStep,
     clearSteps,
+    inCode,
   } = useCurrentSlide();
   const router = useRouter();
   const totalPages = useTotalPages();
@@ -237,15 +238,13 @@ export default function SlidePage({ children, next }) {
   const PREV = 37;
   const PRESENTER = 80;
   let slideCount = 0;
-  const Context = createContext({ inCode: true });
-  const inCode = useContext(Context);
-  console.log(inCode);
 
   const navigate = ({ keyCode, altKey }) => {
     // Handle Presentation Mode shortcut
-    // if (inCode.inCode) {
-    //   return;
-    // }
+    console.log(inCode);
+    if (inCode) {
+      return;
+    }
     if (altKey) {
       if (keyCode === PRESENTER) {
         if (mode === MODES.SPEAKER) {
@@ -391,20 +390,18 @@ export default function SlidePage({ children, next }) {
   };
 
   return (
-    <Context.Provider value={inCode}>
-      <Swipeable onSwipedLeft={swipeLeft} onSwipedRight={swipeRight}>
-        <GlobalStyle />
-        <Storage />
-        <PresentationMode
-          mode={mode}
-          notes={slideNotes()}
-          currentSlide={currentSlide}
-        >
-          <div id="slide" style={{ width: "100%" }}>
-            {renderSlide()}
-          </div>
-        </PresentationMode>
-      </Swipeable>
-    </Context.Provider>
+    <Swipeable onSwipedLeft={swipeLeft} onSwipedRight={swipeRight}>
+      <GlobalStyle />
+      <Storage />
+      <PresentationMode
+        mode={mode}
+        notes={slideNotes()}
+        currentSlide={currentSlide}
+      >
+        <div id="slide" style={{ width: "100%" }}>
+          {renderSlide()}
+        </div>
+      </PresentationMode>
+    </Swipeable>
   );
 }

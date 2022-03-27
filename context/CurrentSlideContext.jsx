@@ -14,9 +14,13 @@ export function CurrentSlideProvider({ children }) {
   const [currentSlide, setSlide] = useState(initialSlide);
   const [currentStep, setCurrentStep] = useState(0);
   const [steps, setSteps] = useState([]);
+  const [inCode, setInCode] = useState(false);
 
   const addStep = (id) => {
     setSteps((prevSteps) => [...new Set([...prevSteps, id])]);
+  };
+  const inCodeChange = (inCode) => {
+    setInCode(inCode);
   };
   const removeStep = (id) => {
     setSteps((prevSteps) => [
@@ -32,6 +36,8 @@ export function CurrentSlideProvider({ children }) {
   return (
     <CurrentSlideContext.Provider
       value={{
+        inCodeChange,
+        inCode,
         currentSlide,
         setSlide,
         currentStep,

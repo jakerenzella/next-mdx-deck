@@ -6,6 +6,7 @@ import MDXProvider from "../components/MDXProvider";
 import { AnimatePresence } from "framer-motion";
 import { CurrentSlideProvider } from "../context/CurrentSlideContext";
 import { ModeProvider } from "../context/ModeContext";
+import { InEditorContext } from "../context/InEditor";
 import TransitionPage from "../layouts/TransitionPage";
 
 const theme = {
@@ -19,8 +20,8 @@ export default function App({ Component, pageProps }) {
     <>
       <MDXProvider>
         <ThemeProvider theme={theme}>
-          <CurrentSlideProvider>
-            <ModeProvider>
+          <ModeProvider>
+            <CurrentSlideProvider>
               <AnimatePresence exitBeforeEnter>
                 <TransitionPage>
                   <Head>
@@ -42,8 +43,8 @@ export default function App({ Component, pageProps }) {
                   <Component {...pageProps} />
                 </TransitionPage>
               </AnimatePresence>
-            </ModeProvider>
-          </CurrentSlideProvider>
+            </CurrentSlideProvider>
+          </ModeProvider>
         </ThemeProvider>
       </MDXProvider>
     </>
