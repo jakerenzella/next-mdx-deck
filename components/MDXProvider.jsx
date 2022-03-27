@@ -17,13 +17,13 @@ const mdComponents = {
   code: (props) => {
     const { className } = props;
     const language = className.replace("language-", "");
-    // console.log(value);
+    console.log(language);
+    console.log({ ...props });
     return (
       <Code
-        className={className}
+        code={props.children}
         language={language}
-        style={okaidia}
-        {...props}
+        // {...props}
       />
     );
   },

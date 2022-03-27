@@ -1,11 +1,13 @@
-import React, { useEffect, createContext, useContext } from "react";
+import React from "react";
 import CodeMirror from "@uiw/react-codemirror";
 import { cpp } from "@codemirror/lang-cpp";
 import useEventListener from "../hooks/useEventListener";
 
-export default function Code({ _code, props }) {
+export default function Code(props) {
   const [focused, setFocused] = React.useState(false);
   const [compileResponse, setResponse] = React.useState("");
+  const [code, setCode] = React.useState(props.code);
+  const [language, setLanguage] = React.useState(props.language);
 
   async function runCode(code) {
     const data = { language: "c", code: code };
@@ -35,14 +37,6 @@ export default function Code({ _code, props }) {
 
   useEventListener("keydown", navigate);
 
-  const [code, setCode] = React.useState(
-    `#include <stdio.h>
-    int main() {
-       // printf() displays the string inside quotation
-       printf("Hello, World!");
-       return 0;
-    }`
-  );
   const handleKeyPress = (event) => {
     console.log(event);
     if (event.key === "ArrowLeft") {
@@ -63,12 +57,9 @@ export default function Code({ _code, props }) {
         className="text-align: left!important"
         value={code}
         language="cpp"
-        // height="400px"
         theme="dark"
         extensions={[cpp()]}
-        onChange={(value, viewUpdate) => {
-          console.log("value:", value);
-        }}
+        onChange={(value, viewUpdate) => setCode(value)}
         onFocus={onFocus}
         onBlur={onBlur}
         onKeyPress={handleKeyPress}
@@ -82,8 +73,6 @@ export default function Code({ _code, props }) {
           editable={false}
           theme="dark"
           extensions={[cpp()]}
-          onFocus={onFocus}
-          onBlur={onBlur}
         />
       ) : null}
     </div>
