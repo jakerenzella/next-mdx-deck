@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, createContext, useContext } from "react";
 import { useRouter } from "next/router";
 import { createGlobalStyle } from "styled-components";
 import Slide from "../components/Slide";
@@ -63,6 +63,13 @@ const GlobalStyle = createGlobalStyle`
     padding: 1rem;
 
     text-align: center;
+
+    .CodeMirror {
+      padding-left: 6rem;
+      padding-right: 6rem;
+      text-align: left;
+      font-size: 1.2rem;
+    }
 
     -webkit-overflow-scrolling: touch;
   }
@@ -230,9 +237,15 @@ export default function SlidePage({ children, next }) {
   const PREV = 37;
   const PRESENTER = 80;
   let slideCount = 0;
+  const Context = createContext({ inCode: true });
+  const inCode = useContext(Context);
+  console.log(inCode);
 
   const navigate = ({ keyCode, altKey }) => {
     // Handle Presentation Mode shortcut
+    // if (inCode.inCode) {
+    //   return;
+    // }
     if (altKey) {
       if (keyCode === PRESENTER) {
         if (mode === MODES.SPEAKER) {
@@ -378,18 +391,20 @@ export default function SlidePage({ children, next }) {
   };
 
   return (
-    <Swipeable onSwipedLeft={swipeLeft} onSwipedRight={swipeRight}>
-      <GlobalStyle />
-      <Storage />
-      <PresentationMode
-        mode={mode}
-        notes={slideNotes()}
-        currentSlide={currentSlide}
-      >
-        <div id="slide" style={{ width: "100%" }}>
-          {renderSlide()}
-        </div>
-      </PresentationMode>
-    </Swipeable>
+    <Context.Provider value={inCode}>
+      <Swipeable onSwipedLeft={swipeLeft} onSwipedRight={swipeRight}>
+        <GlobalStyle />
+        <Storage />
+        <PresentationMode
+          mode={mode}
+          notes={slideNotes()}
+          currentSlide={currentSlide}
+        >
+          <div id="slide" style={{ width: "100%" }}>
+            {renderSlide()}
+          </div>
+        </PresentationMode>
+      </Swipeable>
+    </Context.Provider>
   );
 }
