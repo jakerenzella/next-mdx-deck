@@ -23,6 +23,12 @@ const GlobalStyle = createGlobalStyle`
     --heading-font-weight: 800;
   }
 
+  .warning {
+    font-size: 0.5em;
+    color: #fff;
+    padding-left: 300px
+  }
+
     .button {
       background-color: #222;
       border-radius: 4px;
@@ -152,6 +158,7 @@ const GlobalStyle = createGlobalStyle`
     text-align: center;
 
     .CodeMirror {
+      padding-bottom: 1em;
       padding-left: 6rem;
       padding-right: 6rem;
       text-align: left;

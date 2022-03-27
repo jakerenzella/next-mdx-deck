@@ -4,12 +4,15 @@ import { cpp } from "@codemirror/lang-cpp";
 import { useCurrentSlide } from "../context/CurrentSlideContext";
 
 export default function Code(props) {
-  const [compileResponse, setResponse] = React.useState({
+  const initialCompileResponseState = {
     loading: false,
     success: false,
     error: false,
     result: "",
-  });
+  };
+  const [compileResponse, setResponse] = React.useState(
+    initialCompileResponseState
+  );
   const [code, setCode] = React.useState(props.code);
   const [language, setLanguage] = React.useState(props.language);
 
@@ -46,15 +49,11 @@ export default function Code(props) {
   const onFocus = () => inCodeChange(true);
   const onBlur = () => inCodeChange(false);
 
-  const codeEditorStyle = {
-    boxShadow: "0px 0px 10px 5px #0ff",
-  };
 
   return (
     <div className="CodeMirror">
       <CodeMirror
-        className={`CodeEditor ${inCode ? codeEditorStyle : ""}`}
-        style={inCode ? codeEditorStyle : {}}
+        className='CodeEditor'
         value={code}
         language="cpp"
         theme="dark"
@@ -75,7 +74,7 @@ export default function Code(props) {
         <button
           disabled={compileResponse.loading}
           className="button"
-          onClick={() => setResponse("")}
+          onClick={() => setResponse(initialCompileResponseState)}
           style={{}}
         >
           Clear
@@ -90,9 +89,8 @@ export default function Code(props) {
         ) : (
           ""
         )}
-        <p> {inCode ? "Slide navigation disabled when editing" : ""} </p>
       </div>
-      {compileResponse != "" ? (
+      {compileResponse.result != "" ? (
         <CodeMirror
           value={compileResponse.result}
           editable={false}
