@@ -49,11 +49,10 @@ export default function Code(props) {
   const onFocus = () => inCodeChange(true);
   const onBlur = () => inCodeChange(false);
 
-
   return (
     <div className="CodeMirror">
       <CodeMirror
-        className='CodeEditor'
+        className="CodeEditor"
         value={code}
         language="cpp"
         theme="dark"
@@ -63,39 +62,43 @@ export default function Code(props) {
         onBlur={onBlur}
         editable={!compileResponse.loading}
       />
-      <div className="action-row">
-        <button
-          disabled={compileResponse.loading}
-          className="button"
-          onClick={() => compileCode(code)}
-        >
-          Run
-        </button>
-        <button
-          disabled={compileResponse.loading}
-          className="button"
-          onClick={() => setResponse(initialCompileResponseState)}
-          style={{}}
-        >
-          Clear
-        </button>
-        {compileResponse.loading ? (
-          <div>
-            <div className="lds-ripple">
-              <div></div>
-              <div></div>
-            </div>
+      {language === "c" ? (
+        <span>
+          <div className="action-row" hidden={language === "C"}>
+            <button
+              disabled={compileResponse.loading}
+              className="button"
+              onClick={() => compileCode(code)}
+            >
+              Run
+            </button>
+            <button
+              disabled={compileResponse.loading}
+              className="button"
+              onClick={() => setResponse(initialCompileResponseState)}
+              style={{}}
+            >
+              Clear
+            </button>
+            {compileResponse.loading ? (
+              <div>
+                <div className="lds-ripple">
+                  <div></div>
+                  <div></div>
+                </div>
+              </div>
+            ) : (
+              ""
+            )}
           </div>
-        ) : (
-          ""
-        )}
-      </div>
-      {compileResponse.result != "" ? (
-        <CodeMirror
-          value={compileResponse.result}
-          editable={false}
-          theme="dark"
-        />
+          {compileResponse.result != "" ? (
+            <CodeMirror
+              value={compileResponse.result}
+              editable={false}
+              theme="dark"
+            />
+          ) : null}
+        </span>
       ) : null}
     </div>
   );
