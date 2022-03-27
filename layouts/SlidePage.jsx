@@ -23,6 +23,93 @@ const GlobalStyle = createGlobalStyle`
     --heading-font-weight: 800;
   }
 
+    .button {
+      background-color: #222;
+      border-radius: 4px;
+      border-style: none;
+      box-sizing: border-box;
+      color: #fff;
+      cursor: pointer;
+      display: inline-block;
+      font-family: "Farfetch Basis","Helvetica Neue",Arial,sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.5;
+      margin: 0;
+      max-width: none;
+      min-height: 44px;
+      min-width: 10px;
+      outline: none;
+      overflow: hidden;
+      padding: 9px 20px 8px;
+      position: relative;
+      text-align: center;
+      text-transform: none;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+      width: 100%;
+    }
+
+    .button:hover,
+    .button:focus {
+      opacity: .75;
+    }
+      }
+
+      .action-row {
+        .lds-ripple {
+          display: inline-block;
+          position: relative;
+          height: 20px;
+          bottom: 27px;
+        }
+        .lds-ripple div {
+          position: absolute;
+          border: 4px solid #fff;
+          opacity: 1;
+          border-radius: 50%;
+          animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+        }
+        .lds-ripple div:nth-child(2) {
+          animation-delay: -0.5s;
+        }
+        @keyframes lds-ripple {
+          0% {
+            top: 36px;
+            left: 36px;
+            width: 0;
+            height: 0;
+            opacity: 1;
+          }
+          100% {
+            top: 0px;
+            left: 0px;
+            width: 72px;
+            height: 72px;
+            opacity: 0;
+          }
+        }
+
+
+        margin-top: 0.5em;
+        margin-bottom: 0.5em;
+        display: flex;
+        align-items: center;
+        justify-content: left;
+
+        gap: 0.5rem;
+        button {
+          height: 2rem;
+          width: 4rem;
+        }
+
+        p {
+          margin-left: auto;
+          height: 20px
+        }
+      }
+
   @media (max-width: 600px) {
     :root {
       --base: 1.2rem;
@@ -241,7 +328,7 @@ export default function SlidePage({ children, next }) {
 
   const navigate = ({ keyCode, altKey }) => {
     // Handle Presentation Mode shortcut
-    console.log(inCode);
+    // If we're in a code-editor, we don't want to navigate when we're typing
     if (inCode) {
       return;
     }

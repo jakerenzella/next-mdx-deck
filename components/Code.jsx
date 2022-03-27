@@ -4,11 +4,16 @@ import { cpp } from "@codemirror/lang-cpp";
 import { useCurrentSlide } from "../context/CurrentSlideContext";
 
 export default function Code(props) {
-  const [compileResponse, setResponse] = React.useState("");
+  const [compileResponse, setResponse] = React.useState({
+    loading: false,
+    success: false,
+    error: false,
+    result: "",
+  });
   const [code, setCode] = React.useState(props.code);
   const [language, setLanguage] = React.useState(props.language);
 
-  const { inCodeChange } = useCurrentSlide();
+  const { inCode, inCodeChange } = useCurrentSlide();
 
   async function runCode(code) {
     const data = { language: "c", code: code };
@@ -23,17 +28,33 @@ export default function Code(props) {
   }
 
   async function compileCode(code) {
+    setResponse({
+      loading: true,
+      success: false,
+      error: false,
+      result: "",
+    });
     const response = await runCode(code); // command waits until completion
-    setResponse(response);
+    setResponse({
+      loading: false,
+      success: false,
+      error: false,
+      result: response,
+    });
   }
 
   const onFocus = () => inCodeChange(true);
   const onBlur = () => inCodeChange(false);
 
+  const codeEditorStyle = {
+    boxShadow: "0px 0px 10px 5px #0ff",
+  };
+
   return (
     <div className="CodeMirror">
       <CodeMirror
-        className="text-align: left!important"
+        className={`CodeEditor ${inCode ? codeEditorStyle : ""}`}
+        style={inCode ? codeEditorStyle : {}}
         value={code}
         language="cpp"
         theme="dark"
@@ -41,16 +62,41 @@ export default function Code(props) {
         onChange={(value, viewUpdate) => setCode(value)}
         onFocus={onFocus}
         onBlur={onBlur}
+        editable={!compileResponse.loading}
       />
-      <button onClick={() => compileCode(code)}>Run</button>
-      <button onClick={() => setResponse("")}>Clear</button>
+      <div className="action-row">
+        <button
+          disabled={compileResponse.loading}
+          className="button"
+          onClick={() => compileCode(code)}
+        >
+          Run
+        </button>
+        <button
+          disabled={compileResponse.loading}
+          className="button"
+          onClick={() => setResponse("")}
+          style={{}}
+        >
+          Clear
+        </button>
+        {compileResponse.loading ? (
+          <div>
+            <div className="lds-ripple">
+              <div></div>
+              <div></div>
+            </div>
+          </div>
+        ) : (
+          ""
+        )}
+        <p> {inCode ? "Slide navigation disabled when editing" : ""} </p>
+      </div>
       {compileResponse != "" ? (
         <CodeMirror
-          value={compileResponse}
-          language="cpp"
+          value={compileResponse.result}
           editable={false}
           theme="dark"
-          extensions={[cpp()]}
         />
       ) : null}
     </div>
