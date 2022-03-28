@@ -27,7 +27,8 @@ export default function Code(props) {
       body: JSON.stringify(data),
     });
     let responseData = await response.text();
-    return responseData;
+
+    return JSON.parse(responseData)["output"];
   }
 
   async function compileCode(code) {
@@ -53,7 +54,8 @@ export default function Code(props) {
         loading: false,
         success: false,
         error: error,
-        result: "Error submitting code to compililation server (did not compile)",
+        result:
+          "Error submitting code to compililation server (did not compile)",
       });
     }
   }
