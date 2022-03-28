@@ -31,19 +31,31 @@ export default function Code(props) {
   }
 
   async function compileCode(code) {
+    // loading
     setResponse({
       loading: true,
       success: false,
       error: false,
       result: "",
     });
-    const response = await runCode(code); // command waits until completion
-    setResponse({
-      loading: false,
-      success: false,
-      error: false,
-      result: response,
-    });
+
+    // run code
+    try {
+      const response = await runCode(code); // command waits until completion
+      setResponse({
+        loading: false,
+        success: false,
+        error: false,
+        result: response,
+      });
+    } catch (error) {
+      setResponse({
+        loading: false,
+        success: false,
+        error: error,
+        result: "Error submitting code to compililation server (did not compile)",
+      });
+    }
   }
 
   const onFocus = () => inCodeChange(true);
